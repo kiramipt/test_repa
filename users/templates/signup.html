@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title> Регистрация </title>
+{% endblock %}
+
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'pages/form.css' %}">
+{% endblock %}
+
+{% block content %}
+    <main class="main container">
+
+        {% load user_filters %}
+        <div class="main__header">
+            <h1 class="main__title">Регистрация</h1>
+        </div>
+
+        <div class="form-container">
+
+            {% if form.errors %}
+                {% for error in form.errors %}
+                    <span class="form__error">
+                        {{ error|escape }}
+                    </span>
+                {% endfor %}
+            {% endif %}
+
+            <form class="form" method="post" action="{% url 'signup' %}">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="form__group">
+                        <label for="{{ field.id_for_label }}" class="form__label">{{ field.label }}</label>
+                        <div class="form__field-group">
+                            {{ field| addclass:'form__input'}}
+                            {% if field.help_text %}
+                                <span id='{{ field.id_for_label}}-help' class='form__input-info'>{{ field.help_text|safe }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="form__footer">
+                    <button class="button button_style_blue">Создать аккаунт</button>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+{% endblock %}
